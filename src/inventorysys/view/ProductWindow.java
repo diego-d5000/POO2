@@ -98,7 +98,6 @@ public class ProductWindow {
                 boolean isEditing = false;
 
                 if (product != null) {
-                    product.setCode(code);
                     product.setName(name);
                     product.setBrand(brand);
                     product.setProviderPrice(providerPrice);
