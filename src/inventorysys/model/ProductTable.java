@@ -17,8 +17,8 @@ public class ProductTable extends AbstractTableModel {
 
     private String[] colNames = {"Codigo", "Nombre",
         "Marca", "Precio Proveedor",
-        "Precio Publico", "Stock Maximo",
-        "Stock Minimo", "Existencias"};
+        "Precio Publico", "Stock Minimo",
+        "Stock Maximo", "Existencias"};
 
     private ArrayList<Product> products;
 
@@ -77,10 +77,10 @@ public class ProductTable extends AbstractTableModel {
                 value = product.getPublicPrice();
                 break;
             case 5:
-                value = product.getMaxStock();
+                value = product.getMinStock();
                 break;
             case 6:
-                value = product.getMinStock();
+                value = product.getMaxStock();
                 break;
             case 7:
                 value = product.getStock();

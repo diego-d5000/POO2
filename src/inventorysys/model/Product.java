@@ -120,7 +120,7 @@ public class Product {
         }
         sql.insert("Product", cols, values);
     }
-    
+
     public void update() throws IllegalArgumentException, IllegalAccessException {
         SQLInterface sql = SQLInterface.getInstance();
         String set = "";
@@ -135,8 +135,8 @@ public class Product {
         }
         sql.update("Product", set, "code = '" + this.code + "'");
     }
-    
-    public void delete(){
+
+    public void delete() {
         SQLInterface sql = SQLInterface.getInstance();
         sql.delete("Product", "code = '" + this.code + "'");
         this.code = null;
@@ -162,7 +162,7 @@ public class Product {
                         int minStock = rs.getInt("minStock");
                         int maxStock = rs.getInt("maxStock");
                         int stock = rs.getInt("stock");
-                        
+
                         Product product = new Product(code, name, brand, providerPrice, publicPrice, minStock, maxStock, stock);
                         list.add(product);
                     }
@@ -182,5 +182,16 @@ public class Product {
         } else {
             return null;
         }
+    }
+
+    public String toXsv(char separation) {
+        return "\"" + code + "\"" + separation
+                + "\"" + name + "\"" + separation
+                + "\"" + brand + "\"" + separation
+                + String.valueOf(providerPrice) + separation
+                + String.valueOf(publicPrice) + separation
+                + String.valueOf(minStock) + separation
+                + String.valueOf(maxStock) + separation
+                + String.valueOf(stock);
     }
 }

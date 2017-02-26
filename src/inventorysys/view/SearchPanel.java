@@ -39,7 +39,8 @@ public class SearchPanel extends JPanel {
 
     private void setupView() {
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Busqueda");
-        Border border = BorderFactory.createCompoundBorder(titledBorder, new EmptyBorder(10, 10, 10, 10));
+        Border borderOut = BorderFactory.createCompoundBorder(new EmptyBorder(10, 0, 5, 0), titledBorder);
+        Border border = BorderFactory.createCompoundBorder(borderOut, new EmptyBorder(10, 10, 10, 10));
         this.setBorder(border);
 
         String[] criteriaOptions = {"Codigo", "Nombre", "Marca"};

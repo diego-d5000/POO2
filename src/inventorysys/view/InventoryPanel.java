@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -69,10 +70,22 @@ public class InventoryPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = inventoryTable.getSelectedRow();
                 Product product = getSelectedProduct();
-                product.delete();
-                getTableProductList().remove(selectedRow);
-                
-                fireTableChange();
+                String[] options = {"Si", "No"};
+                int answer = JOptionPane.showOptionDialog(InventoryPanel.this.getParent(),
+                        "El producto '" + product.getName() + "' se borrara por completo. \n"
+                        + "¿Deseas continuar?",
+                        "Confirmación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                if (answer == JOptionPane.YES_OPTION) {
+                    product.delete();
+                    getTableProductList().remove(selectedRow);
+
+                    fireTableChange();
+                }
             }
         });
         buttonsPanel.add(newButton);
@@ -113,13 +126,13 @@ public class InventoryPanel extends JPanel {
 
         tableModel.fireTableDataChanged();
     }
-    
-    public void notifySearchPanelAction(ArrayList<Product> products){
+
+    public void notifySearchPanelAction(ArrayList<Product> products) {
         ProductTable productTable = (ProductTable) inventoryTable.getModel();
         productTable.updateProducts(products);
     }
 
-    private ArrayList<Product> getTableProductList() {
+    public ArrayList<Product> getTableProductList() {
         ProductTable productTable = (ProductTable) inventoryTable.getModel();
         return productTable.getProducts();
     }
