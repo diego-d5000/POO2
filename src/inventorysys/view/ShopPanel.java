@@ -104,7 +104,7 @@ public class ShopPanel extends JPanel {
     }
 
     public void finishAndCommitPurchase() {
-        purchase.setDate(new Date());;
+        purchase.setDate(new Date());
         purchase.create();
     }
 
@@ -151,6 +151,7 @@ public class ShopPanel extends JPanel {
         ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
         ArrayList<Sale> sales = new ArrayList<Sale>();
         model.updateSales(sales);
+        purchase.setSales(sales);
         updateShoppingCartInfo();
     }
 
