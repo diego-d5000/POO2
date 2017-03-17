@@ -63,7 +63,7 @@ public class ShoppingCartTable extends AbstractTableModel {
                 value = sale.getName();
                 break;
             case 2:
-                value = sale.getPrice();
+                value = sale.getAdquisitionPrice();
                 break;
             case 3:
                 value = sale.getQuantity();

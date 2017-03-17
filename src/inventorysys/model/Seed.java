@@ -30,6 +30,23 @@ public class Seed {
                 + "maxStock INT, "
                 + "stock INT");
         
+        sql.createTable("Purchase", "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "date TEXT, "
+                + "total REAL");
+        
+        sql.createTable("Sale", "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "productCode TEXT NOT NULL, "
+                + "adquisitionPrice REAL NOT NULL, "
+                + "quantity INT NOT NULL, "
+                + "subtotal REAL NOT NULL, "
+                + "purchaseId INT NOT NULL, "
+                + "FOREIGN KEY(productCode) REFERENCES Product(code), "
+                + "FOREIGN KEY(purchaseId) REFERENCES Purchase(id)");
+        
+        sql.createTrigger("auto_update_inventory", "INSERT ON Sale",
+                "UPDATE Product SET stock = stock - new.quantity "
+                        + "WHERE code = new.productCode;");
+        
         try {
             ArrayList<Product> products = Product.find("brand = 'Seeder SA'");
             if(products.size() <= 0){
@@ -42,6 +59,8 @@ public class Seed {
                 product = new Product("3265983219", "Chocolate Oscuro", "Seeder SA", 8.50f, 10.0f, 3, 10, 5);
                 product.create();
                 product = new Product("3265983220", "Chocolate Blanco", "Seeder SA", 9.50f, 11.0f, 3, 10, 5);
+                product.create();
+                product = new Product("3265983999", "Gansito", "Seeder SA", 4.50f, 6.0f, 1, 30, 25);
                 product.create();
             }
         } catch (SQLException ex) {

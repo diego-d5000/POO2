@@ -55,6 +55,33 @@ public class SQLInterface {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void createTrigger(String name, String condition, String content) {
+        Connection connection = null;
+        try {
+            try {
+                Class.forName(SQLITE_CLASS);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_NAME);
+
+            // se ejecuta la accion a realizar
+            connection.setAutoCommit(false);
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("CREATE TRIGGER" + " " + name + " " + condition
+                    + "\nBEGIN \n"
+                    + content
+                    + "\nEND;");
+
+            statement.close();
+            connection.commit();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public ResultSet select(String cols, String from, String where, SQLAction sqlAction) {
         ResultSet rs = null;
@@ -89,8 +116,9 @@ public class SQLInterface {
         return rs;
     }
 
-    public void insert(String into, String cols, String values) {
+    public int insert(String into, String cols, String values) {
         Connection connection = null;
+        int lastIndex = 0;
         try {
             try {
                 Class.forName(SQLITE_CLASS);
@@ -109,11 +137,14 @@ public class SQLInterface {
                     + "VALUES ( " + values + " );");
 
             connection.commit();
+            lastIndex = statement.getGeneratedKeys().getInt(1);
             statement.close();
             connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return lastIndex;
     }
 
     public void update(String into, String set, String where) {

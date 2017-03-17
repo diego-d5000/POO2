@@ -5,6 +5,7 @@
  */
 package inventorysys.view;
 
+import inventorysys.model.Product;
 import inventorysys.model.Sale;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,15 +25,17 @@ import javax.swing.JTextArea;
 public class ProductLargeInfoWindow {
 
     ShopPanel shopPanelParent;
+    Product product;
     JFrame frame;
 
-    public ProductLargeInfoWindow(ShopPanel shopPanelParent) {
+    public ProductLargeInfoWindow(ShopPanel shopPanelParent, Product product) {
         this.shopPanelParent = shopPanelParent;
+        this.product = product;
         setupAndShowView();
     }
 
     private void setupAndShowView() {
-        frame = new JFrame();
+        frame = new JFrame(product.getName());
         frame.setSize(200, 500);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -45,14 +48,11 @@ public class ProductLargeInfoWindow {
         c.insets = new Insets(5, 5, 5, 5);
         panel.add(imagePanel, c);
         
-        JTextArea descriptionText = new JTextArea("Lorem ipsum dolor sit amet, consectetur "
-                + "adipiscing elit, sed do eiusmod tempor incididunt ut labore "
-                + "et dolore magna aliqua. Ut enim ad minim veniam, quis "
-                + "nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
-                + "commodo consequat. Duis aute irure dolor in reprehenderit in "
-                + "voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
-                + "Excepteur sint occaecat cupidatat non proident, sunt in "
-                + "culpa qui officia deserunt mollit anim id est laborum.");
+        JTextArea descriptionText = new JTextArea("Nombre: " + product.getName() + "\n"
+        + "Marca: " + product.getBrand() + "\n"
+        + "Precio: " + product.getPublicPrice() + "\n"
+        + "Disponibles: " + product.getStock() + "\n"
+        + "Codigo: " + product.getCode());
         descriptionText.setEditable(false);
         
         descriptionText.setLineWrap(true);
@@ -64,7 +64,7 @@ public class ProductLargeInfoWindow {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                shopPanelParent.registerBoughtProduct(new Sale("0", "Gansito", 180, 1));
+                shopPanelParent.registerBoughtProduct(new Sale(product, product.getPublicPrice(), 1));
             }
         });
         c.fill = GridBagConstraints.HORIZONTAL;

@@ -6,12 +6,14 @@
 package inventorysys.view;
 
 import inventorysys.model.ProductTable;
+import inventorysys.model.Purchase;
 import inventorysys.model.Sale;
 import inventorysys.model.ShoppingCartTable;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -26,7 +28,6 @@ import javax.swing.JTable;
 public class ShopPanel extends JPanel {
 
     JTable shoppingCartTable;
-    ArrayList<Sale> sales = new ArrayList<Sale>();
 
     public ShopPanel() {
         super();
@@ -35,6 +36,7 @@ public class ShopPanel extends JPanel {
     }
 
     private void setupView() {
+        ArrayList<Sale> sales = new ArrayList<Sale>();
         shoppingCartTable = new JTable(new ShoppingCartTable(sales));
         JScrollPane tableScrollPane = new JScrollPane(shoppingCartTable);
         shoppingCartTable.setFillsViewportHeight(true);
@@ -69,6 +71,7 @@ public class ShopPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(ShopPanel.this.getParent(), "Total a pagar: " + getTotal());
+                finishAndCommitPurchase();
                 eraseAll();
             }
         });
@@ -78,13 +81,23 @@ public class ShopPanel extends JPanel {
         this.add(buttonsPanel);
     }
 
+    public void finishAndCommitPurchase() {
+        ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
+        ArrayList<Sale> modelSales = model.getSales();
+
+        Purchase purchase = new Purchase();
+        purchase.setDate(new Date());
+        purchase.setSales(modelSales);
+        purchase.create();
+    }
+
     public void registerBoughtProduct(Sale sale) {
         int inCartIndex = -1;
         ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
         ArrayList<Sale> modelSales = model.getSales();
 
-        for (int i = 0; i < sales.size(); i++) {
-            if (sales.get(i).getCode().equals(sale.getCode())) {
+        for (int i = 0; i < modelSales.size(); i++) {
+            if (modelSales.get(i).getCode().equals(sale.getCode())) {
                 inCartIndex = i;
                 break;
             }
@@ -105,22 +118,22 @@ public class ShopPanel extends JPanel {
         modelSales.get(selectedRow).incrementQuantity(n);
         model.updateSales(modelSales);
     }
-    
-    public void eraseProduct(){
+
+    public void eraseProduct() {
         ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
         ArrayList<Sale> modelSales = model.getSales();
         int selectedRow = shoppingCartTable.getSelectedRow();
         modelSales.remove(selectedRow);
         model.updateSales(modelSales);
     }
-    
-    public void eraseAll(){
+
+    public void eraseAll() {
         ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
         ArrayList<Sale> sales = new ArrayList<Sale>();
         model.updateSales(sales);
     }
-    
-    public float getTotal(){
+
+    public float getTotal() {
         float total = 0;
         ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
         ArrayList<Sale> modelSales = model.getSales();
@@ -128,7 +141,7 @@ public class ShopPanel extends JPanel {
         for (Sale sale : modelSales) {
             total += sale.getSubtotal();
         }
-        
+
         return total;
     }
 }

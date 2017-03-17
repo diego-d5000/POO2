@@ -5,6 +5,7 @@
  */
 package inventorysys.view;
 
+import inventorysys.model.Product;
 import inventorysys.model.Sale;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -25,15 +26,17 @@ import javax.swing.JPanel;
 public class ProductShortInfoWindow {
 
     ShopPanel shopPanelParent;
+    Product product;
     JFrame frame;
 
-    public ProductShortInfoWindow(ShopPanel shopPanelParent) {
+    public ProductShortInfoWindow(ShopPanel shopPanelParent, Product product) {
         this.shopPanelParent = shopPanelParent;
+        this.product = product;
         setupAndShowView();
     }
 
     private void setupAndShowView() {
-        frame = new JFrame();
+        frame = new JFrame(product.getName());
         frame.setSize(350, 210);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -45,19 +48,19 @@ public class ProductShortInfoWindow {
         c.gridy = 0;
         c.insets = new Insets(10, 10, 10, 10);
         panel.add(imagePanel, c);
-        
-        JLabel priceLabel = new JLabel("Precio: $180");
+
+        JLabel priceLabel = new JLabel("Precio: $" + product.getPublicPrice());
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 1;
         c.gridx = 2;
         c.insets = new Insets(0, 10, 0, 10);
         panel.add(priceLabel, c);
-        
+
         JButton buyButton = new JButton("Comprar");
-         buyButton.addActionListener(new ActionListener() {
+        buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                shopPanelParent.registerBoughtProduct(new Sale("0", "Gansito", 180, 1));
+                shopPanelParent.registerBoughtProduct(new Sale(product, product.getPublicPrice(), 1));
             }
         });
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -65,7 +68,7 @@ public class ProductShortInfoWindow {
         c.gridx = 0;
         c.insets = new Insets(0, 5, 0, 5);
         panel.add(buyButton, c);
-        
+
         JButton closeButton = new JButton("Cerrar");
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -77,18 +80,18 @@ public class ProductShortInfoWindow {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         panel.add(closeButton, c);
-        
+
         JButton moreInfoButton = new JButton("Mas información");
         moreInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductLargeInfoWindow productLargeInfoWindow = new ProductLargeInfoWindow(shopPanelParent);
+                ProductLargeInfoWindow productLargeInfoWindow = new ProductLargeInfoWindow(shopPanelParent, product);
             }
         });
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         panel.add(moreInfoButton, c);
-        
+
         frame.add(panel);
         frame.setVisible(true);
     }

@@ -5,8 +5,12 @@
  */
 package inventorysys.view;
 
+import inventorysys.model.Product;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -39,7 +43,13 @@ public class ShopWindow {
         productOne.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductShortInfoWindow productShortInfoWindow = new ProductShortInfoWindow(shopPanel);
+                Product product = null; 
+                try {
+                    product = Product.findByCode("3265983999");
+                } catch (SQLException ex) {
+                    Logger.getLogger(ShopWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ProductShortInfoWindow productShortInfoWindow = new ProductShortInfoWindow(shopPanel, product);
             }
         });
         JMenuItem productTwo = new JMenuItem("Producto 2");

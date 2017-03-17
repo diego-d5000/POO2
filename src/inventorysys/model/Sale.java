@@ -10,43 +10,33 @@ package inventorysys.model;
  * @author diego-d
  */
 public class Sale {
-    private String code;
-    private String name;
-    private float price;
+    private Product product;
+    private float adquisitionPrice;
     private int quantity;
 
     public Sale() {
     }
 
-    public Sale(String code, String name, float price, int quantity) {
-        this.code = code;
-        this.name = name;
-        this.price = price;
+    public Sale(Product product, float price, int quantity) {
+        this.product = product;
+        this.adquisitionPrice = price;
         this.quantity = quantity;
     }
 
     public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+        return product.getCode();
     }
 
     public String getName() {
-        return name;
+        return product.getName();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public float getAdquisitionPrice() {
+        return adquisitionPrice;
     }
 
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
+    public void setAdquisitionPrice(float adquisitionPrice) {
+        this.adquisitionPrice = adquisitionPrice;
     }
 
     public int getQuantity() {
@@ -62,6 +52,6 @@ public class Sale {
     }
     
     public float getSubtotal() {
-        return quantity * price;
+        return quantity * adquisitionPrice;
     }
 }
