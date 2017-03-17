@@ -6,6 +6,7 @@
 package inventorysys.model;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,6 +19,18 @@ import java.util.logging.Logger;
  */
 public class Product {
 
+    public static class Categories {
+
+        public static final String[] NAMES = {"Golosinas", "Chatarra", "Enlatados", "Lacteos", "Carnes", "Basicos"};
+        public static final int GOLOSINAS = 0;
+        public static final int CHATARRA = 1;
+        public static final int ENLATADOS = 2;
+        public static final int LACTEOS = 3;
+        public static final int CARNES = 4;
+        public static final int BASICOS = 5;
+
+    }
+
     private String code;
     private String name;
     private String brand;
@@ -26,11 +39,12 @@ public class Product {
     private int minStock;
     private int maxStock;
     private int stock;
+    private int category;
 
     public Product() {
     }
 
-    public Product(String code, String name, String brand, float providerPrice, float publicPrice, int minStock, int maxStock, int stock) {
+    public Product(String code, String name, String brand, float providerPrice, float publicPrice, int minStock, int maxStock, int stock, int category) {
         this.code = code;
         this.name = name;
         this.brand = brand;
@@ -39,6 +53,15 @@ public class Product {
         this.minStock = minStock;
         this.maxStock = maxStock;
         this.stock = stock;
+        this.category = category;
+    }
+
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
     }
 
     public String getCode() {
@@ -162,8 +185,9 @@ public class Product {
                         int minStock = rs.getInt("minStock");
                         int maxStock = rs.getInt("maxStock");
                         int stock = rs.getInt("stock");
+                        int category = rs.getInt("category");
 
-                        Product product = new Product(code, name, brand, providerPrice, publicPrice, minStock, maxStock, stock);
+                        Product product = new Product(code, name, brand, providerPrice, publicPrice, minStock, maxStock, stock, category);
                         list.add(product);
                     }
                 } catch (SQLException ex) {

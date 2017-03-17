@@ -5,10 +5,15 @@
  */
 package inventorysys.view;
 
+import inventorysys.InventorySys;
 import inventorysys.model.Product;
+import inventorysys.model.Product.Categories;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -22,45 +27,55 @@ import javax.swing.JMenuItem;
  * @author diego-d
  */
 public class ShopWindow {
+
     JFrame frame;
-    public void setupViewAndShow(){
+
+    public void setupViewAndShow() {
         frame = new JFrame();
         ShopPanel shopPanel = new ShopPanel();
-        
+
         frame = new JFrame("Tienda");
         frame.setSize(700, 500);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS));
         frame.add(shopPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                InventorySys.showMainOptions(); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+});
+
         JMenuBar menuBar = new JMenuBar();
-        
+
         JMenu productsMenu = new JMenu("Productos");
         menuBar.add(productsMenu);
-        
-        JMenuItem productOne = new JMenuItem("Producto 1");
-        productsMenu.add(productOne);
-        productOne.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Product product = null; 
-                try {
-                    product = Product.findByCode("3265983999");
-                } catch (SQLException ex) {
-                    Logger.getLogger(ShopWindow.class.getName()).log(Level.SEVERE, null, ex);
+
+        for (int i = 0; i < Categories.NAMES.length; i++) {
+            String category = Categories.NAMES[i];
+            JMenu categorySubmenu = new JMenu(category);
+            productsMenu.add(categorySubmenu);
+
+            try {
+                ArrayList<Product> products = Product.find("category = " + i);
+                for (Product product : products) {
+                    JMenuItem productMenuItem = new JMenuItem(product.getName());
+                    categorySubmenu.add(productMenuItem);
+                    productMenuItem.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            ProductShortInfoWindow productShortInfoWindow = new ProductShortInfoWindow(shopPanel, product);
+                        }
+                    });
                 }
-                ProductShortInfoWindow productShortInfoWindow = new ProductShortInfoWindow(shopPanel, product);
+            } catch (SQLException ex) {
+                Logger.getLogger(ShopWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
-        JMenuItem productTwo = new JMenuItem("Producto 2");
-        productsMenu.add(productTwo);
-        JMenuItem productThree = new JMenuItem("Producto 3");
-        productsMenu.add(productThree);
-        JMenuItem productFour = new JMenuItem("Producto 4");
-        productsMenu.add(productFour);
-        
+        }
+
         frame.setJMenuBar(menuBar);
-        
+
         frame.setVisible(true);
     }
 }

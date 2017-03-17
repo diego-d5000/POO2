@@ -5,11 +5,14 @@
  */
 package inventorysys.view;
 
+import inventorysys.InventorySys;
 import inventorysys.model.Product;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +55,13 @@ public class MainWindow {
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS));
         frame.add(searchPanel);
         frame.add(inventoryPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                InventorySys.showMainOptions(); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
 
         JMenu fileMenuExportOption = new JMenu("Exportar...");
         fileMenu.add(fileMenuExportOption);

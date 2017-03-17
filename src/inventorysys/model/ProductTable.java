@@ -18,7 +18,7 @@ public class ProductTable extends AbstractTableModel {
     private String[] colNames = {"Codigo", "Nombre",
         "Marca", "Precio Proveedor",
         "Precio Publico", "Stock Minimo",
-        "Stock Maximo", "Existencias"};
+        "Stock Maximo", "Existencias", "Categoria"};
 
     private ArrayList<Product> products;
 
@@ -84,6 +84,9 @@ public class ProductTable extends AbstractTableModel {
                 break;
             case 7:
                 value = product.getStock();
+                break;
+            case 8:
+                value = Product.Categories.NAMES[product.getCategory()];
                 break;
             default:
                 value = "N/A";

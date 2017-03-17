@@ -5,6 +5,7 @@
  */
 package inventorysys.model;
 
+import inventorysys.model.Product.Categories;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,7 +29,8 @@ public class Seed {
                 + "publicPrice REAL, "
                 + "minStock INT, "
                 + "maxStock INT, "
-                + "stock INT");
+                + "stock INT, "
+                + "category INT");
         
         sql.createTable("Purchase", "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "date TEXT, "
@@ -50,17 +52,17 @@ public class Seed {
         try {
             ArrayList<Product> products = Product.find("brand = 'Seeder SA'");
             if(products.size() <= 0){
-                Product product = new Product("3165625360", "Helado de fresa", "Seeder SA", 8.0f, 10.0f, 3, 10, 5);
+                Product product = new Product("3165625360", "Helado de fresa", "Seeder SA", 8.0f, 10.0f, 3, 10, 5, Categories.LACTEOS);
                 product.create();
-                product = new Product("3265487895", "Agua 1L", "Seeder SA", 8.50f, 10.0f, 3, 10, 5);
+                product = new Product("3265487895", "Agua 1L", "Seeder SA", 8.50f, 10.0f, 3, 10, 5, Categories.BASICOS);
                 product.create();
-                product = new Product("3265441185", "Atun", "Seeder SA", 9.50f, 13.50f, 3, 10, 5);
+                product = new Product("3265441185", "Atun", "Seeder SA", 9.50f, 13.50f, 3, 10, 5, Categories.ENLATADOS);
                 product.create();
-                product = new Product("3265983219", "Chocolate Oscuro", "Seeder SA", 8.50f, 10.0f, 3, 10, 5);
+                product = new Product("3265983219", "Chocolate Oscuro", "Seeder SA", 8.50f, 10.0f, 3, 10, 5, Categories.GOLOSINAS);
                 product.create();
-                product = new Product("3265983220", "Chocolate Blanco", "Seeder SA", 9.50f, 11.0f, 3, 10, 5);
+                product = new Product("3265983220", "Chocolate Blanco", "Seeder SA", 9.50f, 11.0f, 3, 10, 5, Categories.GOLOSINAS);
                 product.create();
-                product = new Product("3265983999", "Gansito", "Seeder SA", 4.50f, 6.0f, 1, 30, 25);
+                product = new Product("3265983999", "Gansito", "Seeder SA", 4.50f, 6.0f, 1, 30, 25, Categories.GOLOSINAS);
                 product.create();
             }
         } catch (SQLException ex) {

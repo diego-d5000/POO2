@@ -27,12 +27,16 @@ public class InventorySys {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        showMainOptions();
+    }
+    
+    public static void showMainOptions(){
         JFrame invisibleFrame = new JFrame();
-        String[] initialOptions = {"Tienda", "Inventario"};
+        String[] initialOptions = {"Tienda", "Inventario", "Salir"};
         int answer = JOptionPane.showOptionDialog(invisibleFrame,
                 "Seleccione una opcion:",
                 "Inicio",
-                JOptionPane.YES_NO_OPTION,
+                JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 initialOptions,
@@ -46,9 +50,11 @@ public class InventorySys {
             if (answer == JOptionPane.YES_OPTION) {
                 ShopWindow shopWindow = new ShopWindow();
                 shopWindow.setupViewAndShow();
-            } else {
+            } else if(answer == JOptionPane.NO_OPTION) {
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.setupViewAndShow();
+            } else {
+                System.exit(0);
             }
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(InventorySys.class.getName()).log(Level.SEVERE, null, ex);

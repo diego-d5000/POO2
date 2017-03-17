@@ -79,7 +79,6 @@ public class SQLInterface {
             connection.commit();
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

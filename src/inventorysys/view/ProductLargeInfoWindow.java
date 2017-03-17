@@ -6,6 +6,7 @@
 package inventorysys.view;
 
 import inventorysys.model.Product;
+import inventorysys.model.Product.Categories;
 import inventorysys.model.Sale;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -47,19 +48,20 @@ public class ProductLargeInfoWindow {
         c.gridy = 0;
         c.insets = new Insets(5, 5, 5, 5);
         panel.add(imagePanel, c);
-        
+
         JTextArea descriptionText = new JTextArea("Nombre: " + product.getName() + "\n"
-        + "Marca: " + product.getBrand() + "\n"
-        + "Precio: " + product.getPublicPrice() + "\n"
-        + "Disponibles: " + product.getStock() + "\n"
-        + "Codigo: " + product.getCode());
+                + "Marca: " + product.getBrand() + "\n"
+                + "Categoria: " + Categories.NAMES[product.getCategory()]+ "\n"
+                + "Precio: " + product.getPublicPrice() + "\n"
+                + "Disponibles: " + product.getStock() + "\n"
+                + "Codigo: " + product.getCode());
         descriptionText.setEditable(false);
-        
+
         descriptionText.setLineWrap(true);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridy = 1;
         panel.add(descriptionText, c);
-        
+
         JButton buyButton = new JButton("Comprar");
         buyButton.addActionListener(new ActionListener() {
             @Override
@@ -73,7 +75,7 @@ public class ProductLargeInfoWindow {
         c.gridx = 0;
         c.insets = new Insets(0, 5, 0, 5);
         panel.add(buyButton, c);
-        
+
         JButton closeButton = new JButton("Cerrar");
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -85,7 +87,7 @@ public class ProductLargeInfoWindow {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         panel.add(closeButton, c);
-        
+
         frame.add(panel);
         frame.setVisible(true);
     }

@@ -14,12 +14,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -28,15 +32,20 @@ import javax.swing.JTable;
 public class ShopPanel extends JPanel {
 
     JTable shoppingCartTable;
+    Purchase purchase;
+    JLabel countProductsLabel;
+    JLabel totalLabel;
 
     public ShopPanel() {
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        purchase = new Purchase();
         setupView();
     }
 
     private void setupView() {
         ArrayList<Sale> sales = new ArrayList<Sale>();
+        purchase.setSales(sales);
         shoppingCartTable = new JTable(new ShoppingCartTable(sales));
         JScrollPane tableScrollPane = new JScrollPane(shoppingCartTable);
         shoppingCartTable.setFillsViewportHeight(true);
@@ -70,24 +79,32 @@ public class ShopPanel extends JPanel {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(ShopPanel.this.getParent(), "Total a pagar: " + getTotal());
+                JOptionPane.showMessageDialog(ShopPanel.this.getParent(), "Total a pagar: " + purchase.getTotal());
                 finishAndCommitPurchase();
                 eraseAll();
             }
         });
         buttonsPanel.add(buyButton);
 
+        JPanel purchaseInfoPanel = new JPanel(new FlowLayout());
+        countProductsLabel = new JLabel("Carrito: 0");
+        totalLabel = new JLabel("Total: $0");
+        purchaseInfoPanel.add(countProductsLabel);
+        purchaseInfoPanel.add(Box.createHorizontalStrut(10));
+        purchaseInfoPanel.add(totalLabel);
+
         this.add(tableScrollPane);
+        this.add(purchaseInfoPanel);
         this.add(buttonsPanel);
     }
 
-    public void finishAndCommitPurchase() {
-        ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
-        ArrayList<Sale> modelSales = model.getSales();
+    public void updateShoppingCartInfo() {
+        countProductsLabel.setText("Carrito: " + purchase.getProductsCount());
+        totalLabel.setText("Total: $" + purchase.getTotal());
+    }
 
-        Purchase purchase = new Purchase();
-        purchase.setDate(new Date());
-        purchase.setSales(modelSales);
+    public void finishAndCommitPurchase() {
+        purchase.setDate(new Date());;
         purchase.create();
     }
 
@@ -109,6 +126,7 @@ public class ShopPanel extends JPanel {
         }
 
         model.updateSales(modelSales);
+        updateShoppingCartInfo();
     }
 
     public void updateProductQuantity(int n) {
@@ -117,6 +135,7 @@ public class ShopPanel extends JPanel {
         int selectedRow = shoppingCartTable.getSelectedRow();
         modelSales.get(selectedRow).incrementQuantity(n);
         model.updateSales(modelSales);
+        updateShoppingCartInfo();
     }
 
     public void eraseProduct() {
@@ -125,23 +144,14 @@ public class ShopPanel extends JPanel {
         int selectedRow = shoppingCartTable.getSelectedRow();
         modelSales.remove(selectedRow);
         model.updateSales(modelSales);
+        updateShoppingCartInfo();
     }
 
     public void eraseAll() {
         ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
         ArrayList<Sale> sales = new ArrayList<Sale>();
         model.updateSales(sales);
+        updateShoppingCartInfo();
     }
 
-    public float getTotal() {
-        float total = 0;
-        ShoppingCartTable model = (ShoppingCartTable) shoppingCartTable.getModel();
-        ArrayList<Sale> modelSales = model.getSales();
-
-        for (Sale sale : modelSales) {
-            total += sale.getSubtotal();
-        }
-
-        return total;
-    }
 }

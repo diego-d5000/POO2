@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,6 +58,7 @@ public class ProductWindow {
         JLabel minStockLabel = new JLabel("Stock Minimo:");
         JLabel maxStockLabel = new JLabel("Stock Maximo:");
         JLabel stockLabel = new JLabel("Existencias:");
+        JLabel categoryLabel = new JLabel("Categoria:");
 
         JTextField codeTextField = new JTextField(25);
         JTextField nameTextField = new JTextField(25);
@@ -66,6 +68,7 @@ public class ProductWindow {
         JTextField minStockTextField = new JTextField(25);
         JTextField maxStockTextField = new JTextField(25);
         JTextField stockTextField = new JTextField(25);
+        JComboBox categoryComboBox = new JComboBox(Product.Categories.NAMES);
         
         JLabel codeValueLabel = new JLabel();
 
@@ -78,6 +81,7 @@ public class ProductWindow {
             minStockTextField.setText(String.valueOf(product.getMinStock()));
             maxStockTextField.setText(String.valueOf(product.getMaxStock()));
             stockTextField.setText(String.valueOf(product.getStock()));
+            categoryComboBox.setSelectedIndex(product.getCategory());
         }
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -93,6 +97,7 @@ public class ProductWindow {
                 int minStock = Integer.valueOf(minStockTextField.getText());
                 int maxStock = Integer.valueOf(maxStockTextField.getText());
                 int stock = Integer.valueOf(stockTextField.getText());
+                int category = categoryComboBox.getSelectedIndex();
 
                 Product nextProduct;
                 boolean isEditing = false;
@@ -105,6 +110,7 @@ public class ProductWindow {
                     product.setMinStock(minStock);
                     product.setMaxStock(maxStock);
                     product.setStock(stock);
+                    product.setCategory(category);
                     nextProduct = product;
                     isEditing = true;
                 } else {
@@ -115,7 +121,8 @@ public class ProductWindow {
                             publicPrice,
                             minStock,
                             maxStock,
-                            stock);
+                            stock,
+                            category);
                     try {
                         nextProduct.create();
                     } catch (IllegalArgumentException ex) {
@@ -169,11 +176,14 @@ public class ProductWindow {
         frame.add(stockLabel);
         stockLabel.setLabelFor(stockTextField);
         frame.add(stockTextField);
+        frame.add(categoryLabel);
+        stockLabel.setLabelFor(categoryComboBox);
+        frame.add(categoryComboBox);
 
         frame.add(new JPanel());
         frame.add(buttonPanel);
 
-        SpringUtilities.makeCompactGrid(frame.getContentPane(), 9, 2, 12, 12, 20, 20);
+        SpringUtilities.makeCompactGrid(frame.getContentPane(), 10, 2, 12, 12, 20, 20);
 
         frame.setVisible(true);
     }
